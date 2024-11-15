@@ -1,0 +1,10 @@
+# 算法作业
+*.pptx
+*.pdf
+*.ipynb
+*.ipynb_checkpoints
+
+*.log
+*.aux
+*.out
+*.synctex.gz
