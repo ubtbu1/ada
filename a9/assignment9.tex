@@ -159,7 +159,7 @@
 \end{enumerate}
 
 \noindent 因此，无向图的BFS中不存在前向边。
-\subsubsection{参考答案}
+\subsection{参考答案}
 
 
 \paragraph{1.利用反证法，假设其存在，然后推出矛盾即可。}
@@ -195,6 +195,8 @@
 \end{enumerate}
 %--------------------------------
 % 每道题包括题目问题描述和解答。答案请填下解答区。
+
+\pagebreak
 \section{图解算法}
 \subsection{问题描述}
 
@@ -204,8 +206,22 @@
     \centering
     \includegraphics[width=0.5\linewidth]{Figure/9-1.png}
     \caption{图9-1}
-    \label{fig:enter-label}
+    \label{fig:9-1 raw}
 \end{figure}
+
+对图9-2，设源点是u，请给出BFS之后，每个节点的parent和dis值。(默认采用字母序)
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Figure/9-2.png}
+    \caption{图9-2}
+    \label{fig:9-2 raw}
+\end{figure}
+
+
+\subsection{解答}
+
+\subsubsection{对图9-1执行BFS并确定每个节点的parent和dis值}
 
 \begin{figure}[htbp]
     \centering
@@ -240,62 +256,9 @@
         \draw[arrow] (3) -- (6);
         \draw[arrow] (6) edge [loop right] (6);
     \end{tikzpicture}
-    \caption{图9-2-1 ： 源点为3的BFS遍历图}
-    \label{fig:graph-9-1-1}
+    \caption{图9-1}
+    \label{fig:9-1}
 \end{figure}
-
-对图9-2，设源点是u，请给出BFS之后，每个节点的parent和dis值。（默认采用字母序）
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.5\linewidth]{Figure/9-2.png}
-    \caption{图9-2}
-    \label{fig:enter-label}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    \begin{tikzpicture}[
-        scale=1.5,
-        node distance=2.5cm,
-        every node/.style={
-            circle, 
-            draw, 
-            minimum size=2em,
-            inner sep=4pt,
-            font=\large
-        }
-    ]
-        % First component (r-s-v-w)
-        \node (r) {r};
-        \node (s) [right of=r] {s};
-        \node (v) [below of=r] {v};
-        \node (w) [below of=s] {w};
-        
-        % Second component (t-u-x-y)
-        \node (t) [right of=s] {t};
-        \node (u) [right of=t] {u};
-        \node (x) [below of=t] {x};
-        \node (y) [below of=u] {y};
-        
-        % Edges
-        \draw (r) -- (s);
-        \draw (r) -- (v);
-        \draw (s) -- (w);
-        \draw (t) -- (u);
-        \draw (t) -- (x);
-        \draw (u) -- (y);
-        \draw (x) -- (y);
-        \draw (w) -- (t);
-        \draw (w) -- (x);
-    \end{tikzpicture}
-    \caption{图9-2-2}
-    \label{fig:graph-9-2-1}
-\end{figure}
-
-\subsection{解答}
-
-\subsubsection{对图9-1执行BFS并确定每个节点的parent和dis值}
 
 \noindent\textbf{解答：}\\
 给定源点为节点3，我们对图9-1执行广度优先搜索（BFS）。由于图是有向图，部分节点可能无法从源点到达。以下是每个节点在BFS完成后的parent和dis值：
@@ -375,6 +338,47 @@
 \end{enumerate}
 
 \subsubsection{对图9-2执行BFS并确定每个节点的parent和dis值}
+
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[
+        scale=1.5,
+        node distance=2.5cm,
+        every node/.style={
+            circle, 
+            draw, 
+            minimum size=2em,
+            inner sep=4pt,
+            font=\large
+        }
+    ]
+        % First component (r-s-v-w)
+        \node (r) {r};
+        \node (s) [right of=r] {s};
+        \node (v) [below of=r] {v};
+        \node (w) [below of=s] {w};
+        
+        % Second component (t-u-x-y)
+        \node (t) [right of=s] {t};
+        \node (u) [right of=t] {u};
+        \node (x) [below of=t] {x};
+        \node (y) [below of=u] {y};
+        
+        % Edges
+        \draw (r) -- (s);
+        \draw (r) -- (v);
+        \draw (s) -- (w);
+        \draw (t) -- (u);
+        \draw (t) -- (x);
+        \draw (u) -- (y);
+        \draw (x) -- (y);
+        \draw (w) -- (t);
+        \draw (w) -- (x);
+    \end{tikzpicture}
+    \caption{图9-2}
+    \label{fig:9-2}
+\end{figure}
 
 \noindent\textbf{解答：}\\
 给定源点为节点u，我们对图9-2执行广度优先搜索（BFS）。以下是每个节点在BFS完成后的parent和dis值：
@@ -623,7 +627,7 @@
                         w.color:=BLACK;
 \end{lstlisting}
 
-\subsubsection{参考答案}
+\subsection{参考答案}
 
 \paragraph{1.}
 
