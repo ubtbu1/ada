@@ -809,13 +809,13 @@
 
     \begin{lstlisting}[style=algorithmPPT]
         BFS-WARRER(G)
-        foreach node v in [r,x,t,u,v,w,x,y] do
-            v.color:=WHITE; 
-            v.parent=NULL 
-            v.dis:=+∞;
-        foreach node v in [u,r,x,t,v,w,x,y] do
-            if v.color == WHITE then
-                BFS(v)
+        foreach node v1 in [r,x,t,u,v,w,x,y] do
+            v1.color:=WHITE; 
+            v1.parent=NULL 
+            v1.dis:=+∞;
+        foreach node v1 in [u,r,x,t,v,w,x,y] do
+            if v1.color == WHITE then
+                BFS(v1)
                 BFS(u)
                     Initialize an empty queue queNode;
                     u.color:=GRAY; // u 染灰
