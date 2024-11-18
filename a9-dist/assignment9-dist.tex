@@ -1,9 +1,6 @@
 %! Tex program = xelatex
 
 \documentclass{article}
-
-
-
 \usepackage[left=2cm, right=2cm, lines=45, top=0.8in, bottom=0.7in]{geometry}
 
 % \usepackage[utf8]{inputenc} % 用于指定文件的编码格式  
@@ -71,7 +68,6 @@
 % 定义颜色
 \definecolor{keywordblue1}{RGB}{79,113,190}    % 蓝色关键字
 \definecolor{commentgray1}{RGB}{127,127,127}   % 灰色注释
-\definecolor{funcgreen}{RGB}{79,173,91}      % 绿色函数名
 \definecolor{lightgreenbg}{RGB}{229,240,219}  % 浅绿色背景
 
 
@@ -89,15 +85,9 @@
     numbersep=5pt,  
     % 自定义关键字
     morekeywords={foreach, do, then, else, if, while},  % 关键字
-    % % 函数名颜色 - 使用更精确的匹配
-    % moredelim=[b][\color{funcgreen}]{DFS},    % DFS函数
-    % moredelim=[b][\color{funcgreen}]{BFS},    % BFS函数
     % 注释样式
     morecomment=[s][\color{commentgray}\itshape]{<}{>}
 }
-
-\usepackage{placeins}  % 添加 placeins 包用于 \FloatBarrier
-\usepackage{float}     % 添加 float 包用于更好的浮动体控制
 
 
 \begin{document}
@@ -106,7 +96,65 @@
 \author{2207070213 赖立勋} % 替换成自己的学号和姓名
 \maketitle
 
-\section{}
+% 每道题包括题目问题描述和解答。答案请填下解答区。
+\section{PPT补完计划}
+\subsection{问题描述}
+
+请证明：
+
+1. 无向图的广度优先遍历中，不存在BE；
+
+2. 无向图的广度优先遍历中，不存在DE。
+
+\subsection{解答}
+
+\subsubsection{1. 证明无向图BFS中不存在后向边(Back Edge)}
+
+\noindent\textbf{证明：}\\
+设存在后向边$(u,v)$，其中$v$是$u$的祖先节点。我们通过反证法证明这是不可能的。
+
+\begin{enumerate}
+    \item 若$v$是$u$的祖先，则在BFS中：
+    \begin{itemize}
+        \item $v.dis < u.dis$（BFS按层次遍历的性质）
+        \item 具体地，$u.dis = v.dis + k$，其中$k \geq 2$（因为$v$是祖先而非父节点）
+    \end{itemize}
+    
+    \item 然而，由于$(u,v)$是无向图中的边：
+    \begin{itemize}
+        \item 当$v$被发现时，$u$作为$v$的邻居节点应立即被发现
+        \item 此时必有$u.dis = v.dis + 1$
+    \end{itemize}
+    
+    \item 这与步骤1中$u.dis = v.dis + k$ $(k \geq 2)$矛盾
+\end{enumerate}
+
+\noindent 因此，无向图的BFS中不存在后向边。
+
+\subsubsection{2. 证明无向图BFS中不存在前向边(Descendant Edge)}
+
+\noindent\textbf{证明：}\\
+设存在前向边$(u,v)$，其中$v$是$u$的后代但非子节点。同样使用反证法。
+
+\begin{enumerate}
+    \item 由于$v$是$u$的后代但非直接子节点：
+    \begin{itemize}
+        \item $v.dis \geq u.dis + 2$
+        \item （因$v$至少要经过$u$的一个子节点才能到达）
+    \end{itemize}
+    
+    \item 但在无向图中，由于$(u,v)$是一条边：
+    \begin{itemize}
+        \item 当$u$被BFS访问时（变为灰色）
+        \item $v$作为$u$的邻居会被立即检查
+        \item 若$v$为白色，会立即入队，且$v.dis = u.dis + 1$
+        \item 若$v$已被发现，则$v.dis \leq u.dis + 1$
+    \end{itemize}
+    
+    \item 这与步骤1中$v.dis \geq u.dis + 2$矛盾
+\end{enumerate}
+
+\noindent 因此，无向图的BFS中不存在前向边。
 
 \section{图解算法}
 
@@ -1571,5 +1619,274 @@
         \end{minipage}
     \end{figure}
 \end{enumerate}
+
+
+\pagebreak
+
+\section{有环图的检测}
+\subsection{问题描述}
+
+在PPT给出的DFS和BFS框架中，如何解决检测一个图是否存在环的问题？
+
+
+\subsection{解答}
+
+\pagebreak
+
+\subsubsection{PPT给出的DFS和BFS框架}
+
+\paragraph{1.DFS}
+
+\begin{lstlisting}[style=algorithmPPT]
+    DFS(v)
+        v.color:=GRAY
+        <Preorder processing of node v>
+        foreach neighbor w of v do
+            if w.color = WHITE then
+                <Exploratory processing of edge vw>
+                DFS(w)
+                <Backtrack processing of edge vw>
+            else
+                <Checking edge vw>
+        <Postorder processing of node v>
+        v.color:=BLACK
+    \end{lstlisting}
+
+\paragraph{2.BFS}
+
+\begin{lstlisting}[style=algorithmPPT]
+    BFS-WARRER(G)  // 应为 BFS-WALKER 广度优先搜索遍历器
+    foreach node v in G do
+        v.color:=WHITE; 
+        v.parent=NULL 
+        v.dis:=+∞;
+    foreach node v in G do
+        if v.color == WHITE then
+            BFS(v)
+\end{lstlisting}
+
+\begin{lstlisting}[style=algorithmPPT]
+            BFS(G)
+                Initialize an empty queue queNode;
+                v.color:=GRAY;
+                v.dis:=0;
+                queNode.EUQUE(); // 应为 ENQUEUE 同13行
+                while queNode != empty do
+                    w:=queNode.DEQUE();
+                    foreach neighbor x of w do
+                        if x.color==WHITE then
+                            x.color:=GRAY;
+                            x.parent:=w;
+                            x.dis:=w.dis+1;
+                            queNode.ENQUEUE(x);
+                    <processing of node w>; //我之前的缩进错了
+                    w.color:=BLACK;
+\end{lstlisting}
+
+\pagebreak
+
+\subsubsection{框架中检测环的方法}
+
+\paragraph{1.DFS\\}
+
+\textbf{适用有向图，无向图：\\}
+
+\begin{lstlisting}[style=algorithm]
+    DFS_WALKER(G) // DFS遍历器
+    foreach v in G do
+        v.color := WHITE
+    foreach v in G do
+        if v.color == WHITE then
+            DFS(v)
+\end{lstlisting}
+
+\begin{lstlisting}[style=algorithmPPT]
+            DFS(v)
+                v.color:=GRAY
+                <Preorder processing of node v>
+                foreach neighbor w of v do
+                    if w.color = WHITE then
+                        <Exploratory processing of edge vw>
+                        DFS(w)
+                        <Backtrack processing of edge vw>              
+                    else
+                        <Checking edge vw>
+                \end{lstlisting}  
+
+\begin{lstlisting}[style=algorithm]
+                        if w.color == GRAY then
+                            // 发现后向边，存在环
+                            return true
+                        \end{lstlisting}
+
+\begin{lstlisting}[style=algorithmPPT]
+                <Postorder processing of node v>
+                v.color:=BLACK
+            \end{lstlisting}
+
+
+\pagebreak
+
+\paragraph{2.BFS\\}
+
+\begin{enumerate}
+    \item \textbf{有向图：\\}
+
+    \begin{lstlisting}[style=algorithmPPT]
+    BFS-WALKER(G) // BFS遍历器
+    foreach node v in G do
+        v.color:=WHITE; 
+        v.parent=NULL 
+        v.dis:=+∞;
+    foreach node v in G do
+        if v.color == WHITE then
+            BFS(v)
+        \end{lstlisting}
+
+    \begin{lstlisting}[style=algorithmPPT]
+            BFS(G)
+                Initialize an empty queue queNode;
+                v.color:=GRAY;
+                v.dis:=0;
+                queNode.ENQUEUE(v);
+                while queNode != empty do
+                    w:=queNode.DEQUE();
+                    foreach neighbor x of w do
+                        if x.color==WHITE then
+                            x.color:=GRAY;
+                            x.parent:=w;
+                            x.dis:=w.dis+1;
+                            queNode.ENQUEUE(x);
+                        
+                    \end{lstlisting}
+
+    \begin{lstlisting}[style=algorithm]
+                        else if x.color == BLACK then 
+                            // 可能是另一棵树的黑色节点
+                            // 获取并比较两个节点的所有祖先
+                            if hasCommonAncestor(x, w) then
+                                // 发现环
+                        \end{lstlisting}
+
+    \begin{lstlisting}[style=algorithmPPT]
+                    <processing of node w>;
+                    w.color:=BLACK;
+    \end{lstlisting}
+
+    \begin{lstlisting}[style=algorithm]
+    hasCommonAncestor(node1, node2)
+        ancestors := new Set()
+        cur := node1
+        while cur.parent != NULL do
+            ancestors.add(cur.parent)
+            cur := cur.parent
+        
+        cur := node2
+        while cur.parent != NULL do
+            if cur.parent in ancestors then
+                return true
+            cur := cur.parent
+        
+        return false
+    \end{lstlisting}
+
+
+    \item \textbf{无向图：\\}
+
+    \begin{lstlisting}[style=algorithmPPT]
+    BFS-WALKER(G) // BFS遍历器
+        foreach node v in G do
+        v.color:=WHITE; 
+        v.parent=NULL 
+        v.dis:=+∞;
+    foreach node v in G do
+        if v.color == WHITE then
+            BFS(v)
+    \end{lstlisting}
+
+    \begin{lstlisting}[style=algorithmPPT]
+            BFS(G)
+                Initialize an empty queue queNode;
+                v.color:=GRAY;
+                v.dis:=0;
+                queNode.ENQUEUE(v);
+                while queNode != empty do
+                    w:=queNode.DEQUE();
+                    foreach neighbor x of w do
+                        if x.color==WHITE then
+                            x.color:=GRAY;
+                            x.parent:=w;
+                            x.dis:=w.dis+1;
+                            queNode.ENQUEUE(x);
+                    \end{lstlisting}
+
+    \begin{lstlisting}[style=algorithm]
+                        else if x.color == GRAY then
+                            // 发现交叉边，存在环
+                            return true
+                        \end{lstlisting}
+
+    \begin{lstlisting}[style=algorithmPPT]
+                    <processing of node w>;
+                    w.color:=BLACK;
+                \end{lstlisting}
+\end{enumerate}
+
+\pagebreak
+
+\section{DFS与BFS生成树}
+\subsection{问题描述}
+
+给定一个连通图$G=<V,E>$，和一个顶点$u\in V$。假设已经找到了一棵以$u$为根节点的DFS树$T$，又找到了一棵以$u$为根节点的BFS树$T'$，满足$T=T'$。
+
+1. 如果$G$是一个无向图，请证明$G=T$（也就是说，图的所有边都是TE）；
+
+2. 如果$G$是一个有向图，整个结论是否还成立？
+
+\subsection{解答}
+
+\noindent\textbf{解析：}\\
+通过分析有向图和无向图在DFS和BFS中可能出现的边的类型，我们可以得出结论。
+
+\noindent\textbf{1. 无向图的情况（证明$G=T$）}
+\begin{itemize}
+    \item 对于无向图$G$：
+    \begin{itemize}
+        \item DFS中只可能存在TE和BE
+        \item BFS中只可能存在TE和CE
+    \end{itemize}
+    
+    \item 若$G$在DFS中存在BE：
+    \begin{itemize}
+        \item 该BE边在同根节点的BFS中一定会被作为TE边
+        \item 这将导致DFS树不等于BFS树
+    \end{itemize}
+    
+    \item 因此：
+    \begin{itemize}
+        \item $G$在DFS中不能存在BE
+        \item $G$只能包含TE
+        \item 所以$G = T$
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{2. 有向图的情况（结论不成立）}
+\begin{itemize}
+    \item 对于有向图$G$：
+    \begin{itemize}
+        \item DFS中四种类型边（TE、BE、FE、CE）均可能存在
+        \item BFS中除了DE外的边（TE、BE、CE）都可能存在
+    \end{itemize}
+    
+    \item 若$G$在DFS中存在BE或CE：
+    \begin{itemize}
+        \item 在BFS中同样会存在BE和CE
+        \item 这种情况下$G \neq T$
+    \end{itemize}
+    
+    \item 因此结论在有向图中不成立
+\end{itemize}
+
+\pagebreak
 
 \end{document}

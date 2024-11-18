@@ -1,6 +1,10 @@
+# 忽略根目录下.pdf文件，但保留子目录下的.pdf文件
+# 两行顺序不能反
+*.pdf
+!*/*.pdf
+
 # 算法作业
 *.pptx
-*.pdf
 *.ipynb
 *.ipynb_checkpoints
 

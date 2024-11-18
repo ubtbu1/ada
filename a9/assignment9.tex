@@ -68,7 +68,6 @@
 % 定义颜色
 \definecolor{keywordblue1}{RGB}{79,113,190}    % 蓝色关键字
 \definecolor{commentgray1}{RGB}{127,127,127}   % 灰色注释
-\definecolor{funcgreen}{RGB}{79,173,91}      % 绿色函数名
 \definecolor{lightgreenbg}{RGB}{229,240,219}  % 浅绿色背景
 
 
@@ -86,9 +85,6 @@
     numbersep=5pt,  
     % 自定义关键字
     morekeywords={foreach, do, then, else, if, while},  % 关键字
-    % % 函数名颜色 - 使用更精确的匹配
-    % moredelim=[b][\color{funcgreen}]{DFS},    % DFS函数
-    % moredelim=[b][\color{funcgreen}]{BFS},    % BFS函数
     % 注释样式
     morecomment=[s][\color{commentgray}\itshape]{<}{>}
 }
@@ -198,6 +194,7 @@
 
 \pagebreak
 \section{图解算法}
+
 \subsection{问题描述}
 
 对图9-1，设源点是3，请给出BFS之后，每个节点的parent和dis值。(默认采用数字序)
@@ -221,7 +218,6 @@
 \pagebreak
 
 \subsection{解答}
-
 
 \subsubsection{对图9-1执行BFS并确定每个节点的parent和dis值}
 
@@ -263,13 +259,14 @@
 \end{figure}
 
 \begin{enumerate}
-    \item \textbf{初始化：}
+    \item \textbf{初始化，开始第一轮遍历：}
+
     \begin{itemize}
         \item 所有节点染白，parent = -，dis = $\infty$
         \item 3入队，dis = 0
     \end{itemize}
 
-\begin{lstlisting}[style=algorithmPPT]
+    \begin{lstlisting}[style=algorithmPPT]
     BFS-WALKER(G) // BFS遍历器
     foreach v in [1,2,3,4,5,6] do
         v.color:=WHITE; 
@@ -280,7 +277,7 @@
             BFS(v)
         \end{lstlisting}
 
-\begin{lstlisting}[style=algorithmPPT]
+    \begin{lstlisting}[style=algorithmPPT]
             BFS(3)
                 Initialize an empty queue queNode;
                 3.color:=GRAY; // 3 染灰
@@ -341,13 +338,14 @@
                 \hline
             \end{tabular}
             \caption{图9-1-0的BFS结果}
-            \label{tab:graph9-1-bfs-0}
+            \label{tab:graph9-1-0-bfs}
         \end{minipage}
     \end{figure}
 
     \pagebreak
 
     \item \textbf{第一层（dis = 0）：}
+
     \begin{itemize}
         \item 访问节点3：
         \begin{itemize}
@@ -356,7 +354,7 @@
             \item 将节点5和6入队。
         \end{itemize}
 
-        \begin{lstlisting}[style=algorithmPPT]
+    \begin{lstlisting}[style=algorithmPPT]
                 while queNode = [3] != empty do
                     w:=queNode.DEQUE(); // 队头 3 出队，赋给 w
                     foreach neighbor [5,6] of w = 3 do
@@ -435,16 +433,17 @@
     \pagebreak
 
     \item \textbf{第二层（dis = 1）：}
-        \begin{itemize}
-            \item 访问节点5：
-            \begin{itemize}
-                \item 邻居节点为4。
-                \item 设置节点4的 dis = 2，parent = 5。
-                \item 将节点4入队。
-            \end{itemize}
-        \end{itemize}
 
-        \begin{lstlisting}[style=algorithmPPT]
+    \begin{itemize}
+        \item 访问节点5：
+        \begin{itemize}
+            \item 邻居节点为4。
+            \item 设置节点4的 dis = 2，parent = 5。
+            \item 将节点4入队。
+        \end{itemize}
+    \end{itemize}
+
+    \begin{lstlisting}[style=algorithmPPT]
                 while queNode = [5,6] != empty do // 数字序 5<6
                     w:=queNode.DEQUE(); // 队头 5 出队，赋给 w
                     foreach neighbor [4] of w = 5 do
@@ -456,15 +455,16 @@
                     <processing of node 5>;
                     5.color:=BLACK; // 5 染黑
                 \end{lstlisting}    
+
+    \begin{itemize}
+        \item 访问节点6：
         \begin{itemize}
-            \item 访问节点6：
-            \begin{itemize}
-                \item 邻居节点为自身，无需操作。
-            \end{itemize}
+            \item 邻居节点为自身，无需操作。
         \end{itemize}
+    \end{itemize}
 
 
-        \begin{lstlisting}[style=algorithmPPT]
+    \begin{lstlisting}[style=algorithmPPT]
                 while queNode = [6,4] != empty do
                     w:=queNode.DEQUE(); // 队头 6 出队，赋给 w
                     foreach neighbor [6] of w = 6 do // 6 邻居是自己
@@ -472,67 +472,68 @@
                     <processing of node 6>;
                     6.color:=BLACK; // 6 染黑        
                 \end{lstlisting}  
-                    
-        \begin{figure}[htbp]
-            \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
-                \centering
-                \begin{tikzpicture}[
-                    scale=1.5,                    % 恢复原始比例
-                    node distance=3cm,            % 恢复原始间距
-                    every node/.style={
-                        circle, 
-                        draw, 
-                        minimum size=2em,         % 恢复原始节点大小
-                        inner sep=4pt             % 恢复原始内边距
-                    },
-                    >=stealth,
-                    thick,
-                    arrow/.style={->, line width=1pt}
-                ]
-                    % 节点
-                    \node (1) {1};
-                    \node[fill=gray!30] (4) [below of=1] {4};  % 灰色节点
-                    \node (2) [right of=1] {2};
-                    \node[fill=black!100, text=white]  (5) [below of=2] {5}; % 黑色节点，白色文字
-                    \node[fill=black!100, text=white] (3) [right of=2] {3};  % 黑色节点，白色文字
-                    \node[fill=black!100, text=white]  (6) [below of=3] {6}; % 黑色节点，白色文字
-                    
-                    % 边
-                    \draw[arrow] (1) -- (2);
-                    \draw[arrow] (1) -- (4);
-                    \draw[arrow] (4) -- (2);
-                    \draw[arrow] (2) -- (5);
-                    \draw[arrow] (5) -- (4);
-                    \draw[arrow] (3) -- (5);
-                    \draw[arrow] (3) -- (6);
-                    \draw[arrow] (6) edge [loop right] (6);
-                \end{tikzpicture}
-                \caption{图9-1-2}
-                \label{fig:9-1-2}
-            \end{minipage}%
-            \hfill%                              % 添加水平填充
-            \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
-                \centering
-                \begin{tabular}{|c|c|c|}
-                    \hline
-                    节点编号 & Parent & dis值 \\
-                    \hline
-                    1 & - & $\infty$ \\
-                    2 & - & $\infty$ \\
-                    3 & - & 0 \\
-                    4 & 5 & 2 \\
-                    5 & 3 & 1 \\
-                    6 & 3 & 1 \\
-                    \hline
-                \end{tabular}
-                \caption{图9-1-2的BFS结果}
-                \label{tab:graph9-1-2-bfs}
-            \end{minipage}
-        \end{figure}
-             
+                
+    \begin{figure}[htbp]
+        \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
+            \centering
+            \begin{tikzpicture}[
+                scale=1.5,                    % 恢复原始比例
+                node distance=3cm,            % 恢复原始间距
+                every node/.style={
+                    circle, 
+                    draw, 
+                    minimum size=2em,         % 恢复原始节点大小
+                    inner sep=4pt             % 恢复原始内边距
+                },
+                >=stealth,
+                thick,
+                arrow/.style={->, line width=1pt}
+            ]
+                % 节点
+                \node (1) {1};
+                \node[fill=gray!30] (4) [below of=1] {4};  % 灰色节点
+                \node (2) [right of=1] {2};
+                \node[fill=black!100, text=white]  (5) [below of=2] {5}; % 黑色节点，白色文字
+                \node[fill=black!100, text=white] (3) [right of=2] {3};  % 黑色节点，白色文字
+                \node[fill=black!100, text=white]  (6) [below of=3] {6}; % 黑色节点，白色文字
+                
+                % 边
+                \draw[arrow] (1) -- (2);
+                \draw[arrow] (1) -- (4);
+                \draw[arrow] (4) -- (2);
+                \draw[arrow] (2) -- (5);
+                \draw[arrow] (5) -- (4);
+                \draw[arrow] (3) -- (5);
+                \draw[arrow] (3) -- (6);
+                \draw[arrow] (6) edge [loop right] (6);
+            \end{tikzpicture}
+            \caption{图9-1-2}
+            \label{fig:9-1-2}
+        \end{minipage}%
+        \hfill%                              % 添加水平填充
+        \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
+            \centering
+            \begin{tabular}{|c|c|c|}
+                \hline
+                节点编号 & Parent & dis值 \\
+                \hline
+                1 & - & $\infty$ \\
+                2 & - & $\infty$ \\
+                3 & - & 0 \\
+                4 & 5 & 2 \\
+                5 & 3 & 1 \\
+                6 & 3 & 1 \\
+                \hline
+            \end{tabular}
+            \caption{图9-1-2的BFS结果}
+            \label{tab:graph9-1-2-bfs}
+        \end{minipage}
+    \end{figure}
+            
     \pagebreak
 
     \item \textbf{第三层（dis = 2）：}
+
     \begin{itemize}
         \item 访问节点4：
         \begin{itemize}
@@ -613,7 +614,9 @@
     \end{figure}
 
     \pagebreak
+
     \item \textbf{第四层（dis = 3）：}
+
     \begin{itemize}
         \item 访问节点2：
         \begin{itemize}
@@ -622,12 +625,12 @@
     \end{itemize}
     
     \begin{lstlisting}[style=algorithmPPT]
-        while queNode = [2] != empty do
-            w:=queNode.DEQUE(); // 队头 2 出队，赋给 w
-            foreach neighbor [5] of w = 2 do 
-                if 5.color==WHITE then // False
-            <processing of node 2>;
-            2.color:=BLACK; // 2 染黑        
+                while queNode = [2] != empty do
+                    w:=queNode.DEQUE(); // 队头 2 出队，赋给 w
+                    foreach neighbor [5] of w = 2 do 
+                        if 5.color==WHITE then // False
+                    <processing of node 2>;
+                    2.color:=BLACK; // 2 染黑        
         \end{lstlisting}    
 
     \begin{figure}[htbp]
@@ -687,14 +690,178 @@
     \end{minipage}
     \end{figure}
     
-    \item \textbf{结束：}
+    \item \textbf{开始第二轮遍历：}
+
     \begin{itemize}
-        \item 队列为空，BFS结束。
+        \item 1入队，dis = 0
     \end{itemize}
 
     \begin{lstlisting}[style=algorithmPPT]
-        while queNode = [] != empty do   // queNode = [] False
+    foreach v in [3,1,2,4,5,6] do // 1为白色
+        if v.color == WHITE then
+            BFS(v)
+        \end{lstlisting}
+
+    \begin{lstlisting}[style=algorithmPPT]
+            BFS(1)
+                Initialize an empty queue queNode;
+                1.color:=GRAY; // 1 染灰
+                1.dis:=0; // 1 dis=0
+                queNode.ENQUEUE(1); // 1 入队
+        \end{lstlisting}
+
+    \begin{figure}[htbp]
+        \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
+            \centering
+            \begin{tikzpicture}[
+                scale=1.5,                    % 恢复原始比例
+                node distance=3cm,            % 恢复原始间距
+                every node/.style={
+                    circle, 
+                    draw, 
+                    minimum size=2em,         % 恢复原始节点大小
+                    inner sep=4pt             % 恢复原始内边距
+                },
+                >=stealth,
+                thick,
+                arrow/.style={->, line width=1pt}
+            ]
+                % 节点
+                \node[fill=gray!30] (1) {1};
+                \node[fill=black!100, text=white] (4) [below of=1] {4};  % 灰色节点
+                \node[fill=black!100, text=white] (2) [right of=1] {2};
+                \node[fill=black!100, text=white]  (5) [below of=2] {5}; % 黑色节点，白色文字
+                \node[fill=black!100, text=white] (3) [right of=2] {3};  % 黑色节点，白色文字
+                \node[fill=black!100, text=white]  (6) [below of=3] {6}; % 黑色节点，白色文字
+                
+                % 边
+                \draw[arrow] (1) -- (2);
+                \draw[arrow] (1) -- (4);
+                \draw[arrow] (4) -- (2);
+                \draw[arrow] (2) -- (5);
+                \draw[arrow] (5) -- (4);
+                \draw[arrow] (3) -- (5);
+                \draw[arrow] (3) -- (6);
+                \draw[arrow] (6) edge [loop right] (6);
+            \end{tikzpicture}
+            \caption{图9-1-5}
+            \label{fig:9-1-5}
+        \end{minipage}%
+        \hfill%                              % 添加水平填充
+        \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
+            \centering
+            \begin{tabular}{|c|c|c|}
+                \hline
+                节点编号 & Parent & dis值 \\
+                \hline
+                1 & - & 0 \\
+                2 & 4 & 3 \\
+                3 & - & 0 \\
+                4 & 5 & 2 \\
+                5 & 3 & 1 \\
+                6 & 3 & 1 \\
+                \hline
+            \end{tabular}
+            \caption{图9-1-5的BFS结果}
+            \label{tab:graph9-1-5-bfs}
+        \end{minipage}
+    \end{figure}
+
+    \pagebreak
+
+    \item \textbf{第二轮，第一层（dis = 0）：}
+    
+    \begin{itemize}
+        \item 访问节点1：
+        \begin{itemize}
+            \item 邻居节点为2和4。2和4为黑色，无需操作。
+        \end{itemize}
+    \end{itemize}
+
+    \begin{lstlisting}[style=algorithmPPT]
+                while queNode = [1] != empty do
+                    w:=queNode.DEQUE(); // 队头 1 出队，赋给 w
+                    foreach neighbor [2,4] of w = 1 do
+                        if 2.color==WHITE then // 2.color=BLACK False
+                        if 4.color==WHITE then // 4.color=BLACK False
+                    <processing of node w>;
+                    1.color:=BLACK; // 1 染黑
+        \end{lstlisting}
+ 
+    \begin{figure}[htbp]
+        \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
+            \centering
+            \begin{tikzpicture}[
+                scale=1.5,                    % 恢复原始比例
+                node distance=3cm,            % 恢复原始间距
+                every node/.style={
+                    circle, 
+                    draw, 
+                    minimum size=2em,         % 恢复原始节点大小
+                    inner sep=4pt             % 恢复原始内边距
+                },
+                >=stealth,
+                thick,
+                arrow/.style={->, line width=1pt}
+            ]
+                % 节点
+                \node[fill=black!100, text=white] (1) {1};
+                \node[fill=black!100, text=white] (4) [below of=1] {4};
+                \node[fill=black!100, text=white] (2) [right of=1] {2};
+                \node[fill=black!100, text=white] (5) [below of=2] {5};  % 灰色节点
+                \node[fill=black!100, text=white] (3) [right of=2] {3};  % 黑色节点，白色文字
+                \node[fill=black!100, text=white] (6) [below of=3] {6};  % 灰色节点
+                
+                % 边
+                \draw[arrow] (1) -- (2);
+                \draw[arrow] (1) -- (4);
+                \draw[arrow] (4) -- (2);
+                \draw[arrow] (2) -- (5);
+                \draw[arrow] (5) -- (4);
+                \draw[arrow] (3) -- (5);
+                \draw[arrow] (3) -- (6);
+                \draw[arrow] (6) edge [loop right] (6);
+            \end{tikzpicture}
+            \caption{图9-1-6}
+            \label{fig:9-1-6}
+        \end{minipage}%
+        \hfill%                              % 添加水平填充
+        \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
+            \centering
+            \begin{tabular}{|c|c|c|}
+                \hline
+                节点编号 & Parent & dis值 \\
+                \hline
+                1 & - & 0 \\
+                2 & 4 & 3 \\
+                3 & - & 0 \\
+                4 & 5 & 2 \\
+                5 & 3 & 1 \\
+                6 & 3 & 1 \\
+                \hline
+            \end{tabular}
+            \caption{图9-1-6的BFS结果}
+            \label{tab:graph9-1-6-bfs}
+        \end{minipage}
+    \end{figure}
+
+
+    \item \textbf{结束：}
+
+    \begin{itemize}
+        \item 队列为空，while循环结束。
+        \item 外层节点全黑，BFS结束。
+    \end{itemize}
+
+    \begin{lstlisting}[style=algorithmPPT]
+                while queNode = [] != empty do   // queNode = [] False
         \end{lstlisting}    
+
+    \begin{lstlisting}[style=algorithmPPT]
+    foreach v in [3,1,2,4,5,6] do //全部为黑色
+        if v.color == WHITE then
+            BFS(v)
+        \end{lstlisting}
 
     \begin{figure}[htbp]
     \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
@@ -713,7 +880,7 @@
             arrow/.style={->, line width=1pt}
         ]
             % 节点
-            \node (1) {1};
+            \node[fill=black!100, text=white] (1) {1};
             \node[fill=black!100, text=white] (4) [below of=1] {4};  % 灰色节点
             \node[fill=black!100, text=white] (2) [right of=1] {2};
             \node[fill=black!100, text=white]  (5) [below of=2] {5}; % 黑色节点，白色文字
@@ -730,8 +897,8 @@
             \draw[arrow] (3) -- (6);
             \draw[arrow] (6) edge [loop right] (6);
         \end{tikzpicture}
-        \caption{图9-1-5}
-        \label{fig:9-1-5}
+        \caption{图9-1-7}
+        \label{fig:9-1-7}
     \end{minipage}%
     \hfill%                              % 添加水平填充
     \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
@@ -740,7 +907,7 @@
             \hline
             节点编号 & Parent & dis值 \\
             \hline
-            1 & - & $\infty$ \\
+            1 & - & 0 \\
             2 & 4 & 3 \\
             3 & - & 0 \\
             4 & 5 & 2 \\
@@ -748,8 +915,8 @@
             6 & 3 & 1 \\
             \hline
         \end{tabular}
-        \caption{图9-1-5的BFS结果}
-        \label{tab:graph9-1-5-bfs}
+        \caption{图9-1-7的BFS结果}
+        \label{tab:graph9-1-7-bfs}
     \end{minipage}
     \end{figure}
     
@@ -758,7 +925,6 @@
 \clearpage 
 
 \subsubsection{对图9-2执行BFS并确定每个节点的parent和dis值}
-
 
 \begin{figure}[htbp]
     \centering
@@ -801,7 +967,9 @@
 \end{figure}
 
 \begin{enumerate}
+
     \item \textbf{初始化：}
+
     \begin{itemize}
         \item 所有节点染白，parent = -，dis = $\infty$
         \item u入队，dis = 0
@@ -809,81 +977,83 @@
 
     \begin{lstlisting}[style=algorithmPPT]
         BFS-WARRER(G)
-        foreach node v1 in [r,x,t,u,v,w,x,y] do
-            v1.color:=WHITE; 
-            v1.parent=NULL 
-            v1.dis:=+∞;
-        foreach node v1 in [u,r,x,t,v,w,x,y] do
-            if v1.color == WHITE then
-                BFS(v1)
+        foreach node v in [r,x,t,u,v,w,x,y] do
+            v.color:=WHITE; 
+            v.parent=NULL 
+            v.dis:=+∞;
+        foreach node v in [u,r,x,t,v,w,x,y] do
+            if v.color == WHITE then
+                BFS(v)
                 BFS(u)
                     Initialize an empty queue queNode;
                     u.color:=GRAY; // u 染灰
                     u.dis:=0; // u dis=0
                     queNode.ENQUEUE(u); // u 入队
-    \end{lstlisting}
-\begin{figure}[htbp]
-    \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
+                \end{lstlisting}
+
+    \begin{figure}[htbp]
+        \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
             \centering
-    \begin{tikzpicture}[
-        scale=1.5,
-        node distance=2.5cm,
-        every node/.style={
-            circle, 
-            draw, 
-            minimum size=2em,
-            inner sep=4pt,
-            font=\large
-        }
-    ]
-        \node (r) {r};
-        \node (s) [right of=r] {s};
-        \node (t) [right of=s] {t};
-        \node[fill=gray!30] (u) [right of=t] {u};
-        \node (v) [below of=r] {v};
-        \node (w) [below of=s] {w};
-        \node (x) [below of=t] {x};
-        \node (y) [below of=u] {y};
-        
-        % Edges
-        \draw (r) -- (s);
-        \draw (r) -- (v);
-        \draw (s) -- (w);
-        \draw (t) -- (u);
-        \draw (t) -- (x);
-        \draw (u) -- (y);
-        \draw (x) -- (y);
-        \draw (w) -- (t);
-        \draw (w) -- (x);
-    \end{tikzpicture}
-    \caption{图9-2-0}
-    \label{fig:9-2-0}
-    \end{minipage}%
-    \hfill%                              % 添加水平填充
-    \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
-        \centering
-        \begin{tabular}{|c|c|c|}
-            \hline
-            节点 & Parent & dis值 \\
-            \hline
-            r & - & $\infty$ \\
-            s & - & $\infty$ \\
-            t & - & $\infty$ \\
-            u & - & 0 \\
-            v & - & $\infty$ \\
-            w & - & $\infty$ \\
-            x & - & $\infty$ \\
-            y & - & $\infty$ \\
-            \hline
-        \end{tabular}
-        \caption{图9-2-0的BFS结果}
-        \label{tab:graph9-2-0-bfs}
-    \end{minipage}
+                \begin{tikzpicture}[
+                    scale=1.5,
+                    node distance=2.5cm,
+                    every node/.style={
+                        circle, 
+                        draw, 
+                        minimum size=2em,
+                        inner sep=4pt,
+                        font=\large
+                    }
+                ]
+                    \node (r) {r};
+                    \node (s) [right of=r] {s};
+                    \node (t) [right of=s] {t};
+                    \node[fill=gray!30] (u) [right of=t] {u};
+                    \node (v) [below of=r] {v};
+                    \node (w) [below of=s] {w};
+                    \node (x) [below of=t] {x};
+                    \node (y) [below of=u] {y};
+                    
+                    % Edges
+                    \draw (r) -- (s);
+                    \draw (r) -- (v);
+                    \draw (s) -- (w);
+                    \draw (t) -- (u);
+                    \draw (t) -- (x);
+                    \draw (u) -- (y);
+                    \draw (x) -- (y);
+                    \draw (w) -- (t);
+                    \draw (w) -- (x);
+                \end{tikzpicture}
+                \caption{图9-2-0}
+                \label{fig:9-2-0}
+        \end{minipage}%
+        \hfill%                              % 添加水平填充
+        \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
+            \centering
+                \begin{tabular}{|c|c|c|}
+                    \hline
+                    节点 & Parent & dis值 \\
+                    \hline
+                    r & - & $\infty$ \\
+                    s & - & $\infty$ \\
+                    t & - & $\infty$ \\
+                    u & - & 0 \\
+                    v & - & $\infty$ \\
+                    w & - & $\infty$ \\
+                    x & - & $\infty$ \\
+                    y & - & $\infty$ \\
+                    \hline
+                \end{tabular}
+                \caption{图9-2-0的BFS结果}
+                \label{tab:graph9-2-0-bfs}
+        \end{minipage}
     \end{figure}
     
     \pagebreak
     
     \item \textbf{第一层（dis = 0）：}
+    
     \begin{itemize}
         \item 访问节点u，发现邻居t和y
         \item 设置t和y的dis值为1，parent为u
@@ -971,12 +1141,12 @@
 
     \item \textbf{第二层（dis = 1）：}
 
-        \begin{itemize}
-            \item 访问t：发现w和x，设置它们的dis值为2，parent为t
-       
-        \end{itemize}
+    \begin{itemize}
+        \item 访问t：发现w和x，设置它们的dis值为2，parent为t
+    
+    \end{itemize}
 
-        \begin{lstlisting}[style=algorithmPPT]
+    \begin{lstlisting}[style=algorithmPPT]
                 while queNode = [t,y] != empty do 
                     w1:=queNode.DEQUE(); // 队头 t 出队，赋给 w1
                     foreach neighbor [u,w,x] of w1 = t do
@@ -994,12 +1164,13 @@
                     <processing of node t>;
                     t.color:=BLACK; // t 染黑
                 \end{lstlisting}    
-        \begin{itemize}
-            \item 访问y：邻居均已访问或在队列中
-        \end{itemize}
+        
+    \begin{itemize}
+        \item 访问y：邻居均已访问或在队列中
+    \end{itemize}
 
 
-        \begin{lstlisting}[style=algorithmPPT]
+    \begin{lstlisting}[style=algorithmPPT]
                 while queNode = [y,w,x] != empty do
                     w1:=queNode.DEQUE(); // 队头 y 出队，赋给 w1
                     foreach neighbor [u,x] of w1 = y do 
@@ -1008,43 +1179,44 @@
                     <processing of node y>;
                     y.color:=BLACK; // y 染黑        
                 \end{lstlisting}  
-        \begin{figure}[htbp]
-            \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
-                \centering
-                    \begin{tikzpicture}[
-                        scale=1.5,
-                        node distance=2.5cm,
-                        every node/.style={
-                            circle, 
-                            draw, 
-                            minimum size=2em,
-                            inner sep=4pt,
-                            font=\large
-                        }
-                    ]
-                        
-                        \node (r) {r};
-                        \node (s) [right of=r] {s};
-                        \node[fill=black!100, text=white] (t) [right of=s] {t};
-                        \node[fill=black!100, text=white] (u) [right of=t] {u};
-                        \node (v) [below of=r] {v};
-                        \node[fill=gray!30] (w) [below of=s] {w};
-                        \node[fill=gray!30] (x) [below of=t] {x};
-                        \node[fill=black!100, text=white] (y) [below of=u] {y};
-                        
-                        % Edges
-                        \draw (r) -- (s);
-                        \draw (r) -- (v);
-                        \draw (s) -- (w);
-                        \draw (t) -- (u);
-                        \draw (t) -- (x);
-                        \draw (u) -- (y);
-                        \draw (x) -- (y);
-                        \draw (w) -- (t);
-                        \draw (w) -- (x);
-                    \end{tikzpicture}
-                    \caption{图9-2-1}
-                    \label{fig:9-2-1}
+    
+    \begin{figure}[htbp]
+        \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
+            \centering
+                \begin{tikzpicture}[
+                    scale=1.5,
+                    node distance=2.5cm,
+                    every node/.style={
+                        circle, 
+                        draw, 
+                        minimum size=2em,
+                        inner sep=4pt,
+                        font=\large
+                    }
+                ]
+                    
+                    \node (r) {r};
+                    \node (s) [right of=r] {s};
+                    \node[fill=black!100, text=white] (t) [right of=s] {t};
+                    \node[fill=black!100, text=white] (u) [right of=t] {u};
+                    \node (v) [below of=r] {v};
+                    \node[fill=gray!30] (w) [below of=s] {w};
+                    \node[fill=gray!30] (x) [below of=t] {x};
+                    \node[fill=black!100, text=white] (y) [below of=u] {y};
+                    
+                    % Edges
+                    \draw (r) -- (s);
+                    \draw (r) -- (v);
+                    \draw (s) -- (w);
+                    \draw (t) -- (u);
+                    \draw (t) -- (x);
+                    \draw (u) -- (y);
+                    \draw (x) -- (y);
+                    \draw (w) -- (t);
+                    \draw (w) -- (x);
+                \end{tikzpicture}
+                \caption{图9-2-1}
+                \label{fig:9-2-1}
     \end{minipage}%
     \hfill%                              % 添加水平填充
     \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
@@ -1069,6 +1241,7 @@
     \end{figure}
 
     \pagebreak 
+
     \item \textbf{第三层（dis = 2）：}
     
     \begin{itemize}
@@ -1089,10 +1262,10 @@
                     <processing of node w>;
                     w.color:=BLACK; // w 染黑
                 \end{lstlisting}    
+    
     \begin{itemize}
         \item 访问x：邻居均已访问
     \end{itemize}
-
 
     \begin{lstlisting}[style=algorithmPPT]
                 while queNode = [x,s] != empty do
@@ -1104,6 +1277,7 @@
                     <processing of node x>;
                     x.color:=BLACK; // x 染黑        
                 \end{lstlisting}  
+
     \begin{figure}[htbp]
         \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
             \centering
@@ -1167,6 +1341,7 @@
     \pagebreak
 
     \item \textbf{第四层（dis = 3）：}
+    
     \begin{itemize}
         \item 访问s：发现r，设置其dis值为4，parent为s
     \end{itemize}
@@ -1246,7 +1421,9 @@
     \end{figure}
     
     \pagebreak 
+
     \item \textbf{第五层（dis = 4）：}
+    
     \begin{itemize}
         \item 访问r：发现v，设置其dis值为5，parent为r
     \end{itemize}
@@ -1326,56 +1503,59 @@
     \end{figure}
 
     \pagebreak
+    
     \item \textbf{第六层（dis = 5）：}
+    
     \begin{itemize}
         \item 访问v：邻居均已访问
     \end{itemize}
+
     \begin{lstlisting}[style=algorithmPPT]
-        while queNode = [v] != empty do 
-            w1:=queNode.DEQUE(); // 队头 v 出队，赋给 w1
-            foreach neighbor [r] of w1 = v do
-                if r.color==WHITE then // r.color=BLACK False
-            <processing of node v>;
-            v.color:=BLACK; // v 染黑
+                while queNode = [v] != empty do 
+                    w1:=queNode.DEQUE(); // 队头 v 出队，赋给 w1
+                    foreach neighbor [r] of w1 = v do
+                        if r.color==WHITE then // r.color=BLACK False
+                    <processing of node v>;
+                    v.color:=BLACK; // v 染黑
         \end{lstlisting}    
 
     \begin{figure}[htbp]
-    \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
-        \centering
-            \begin{tikzpicture}[
-                scale=1.5,
-                node distance=2.5cm,
-                every node/.style={
-                    circle, 
-                    draw, 
-                    minimum size=2em,
-                    inner sep=4pt,
-                    font=\large
-                }
-            ]
-                
-                \node[fill=black!100, text=white] (r) {r};
-                \node[fill=black!100, text=white] (s) [right of=r] {s};
-                \node[fill=black!100, text=white] (t) [right of=s] {t};
-                \node[fill=black!100, text=white] (u) [right of=t] {u};
-                \node[fill=black!100, text=white] (v) [below of=r] {v};
-                \node[fill=black!100, text=white] (w) [below of=s] {w};
-                \node[fill=black!100, text=white] (x) [below of=t] {x};
-                \node[fill=black!100, text=white] (y) [below of=u] {y};
-                
-                % Edges
-                \draw (r) -- (s);
-                \draw (r) -- (v);
-                \draw (s) -- (w);
-                \draw (t) -- (u);
-                \draw (t) -- (x);
-                \draw (u) -- (y);
-                \draw (x) -- (y);
-                \draw (w) -- (t);
-                \draw (w) -- (x);
-            \end{tikzpicture}
-            \caption{图9-2-6}
-            \label{fig:9-2-6}
+        \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
+            \centering
+                \begin{tikzpicture}[
+                    scale=1.5,
+                    node distance=2.5cm,
+                    every node/.style={
+                        circle, 
+                        draw, 
+                        minimum size=2em,
+                        inner sep=4pt,
+                        font=\large
+                    }
+                ]
+                    
+                    \node[fill=black!100, text=white] (r) {r};
+                    \node[fill=black!100, text=white] (s) [right of=r] {s};
+                    \node[fill=black!100, text=white] (t) [right of=s] {t};
+                    \node[fill=black!100, text=white] (u) [right of=t] {u};
+                    \node[fill=black!100, text=white] (v) [below of=r] {v};
+                    \node[fill=black!100, text=white] (w) [below of=s] {w};
+                    \node[fill=black!100, text=white] (x) [below of=t] {x};
+                    \node[fill=black!100, text=white] (y) [below of=u] {y};
+                    
+                    % Edges
+                    \draw (r) -- (s);
+                    \draw (r) -- (v);
+                    \draw (s) -- (w);
+                    \draw (t) -- (u);
+                    \draw (t) -- (x);
+                    \draw (u) -- (y);
+                    \draw (x) -- (y);
+                    \draw (w) -- (t);
+                    \draw (w) -- (x);
+                \end{tikzpicture}
+                \caption{图9-2-6}
+                \label{fig:9-2-6}
     \end{minipage}%
     \hfill%                              % 添加水平填充
     \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
@@ -1400,77 +1580,83 @@
     \end{figure}
 
     \item \textbf{结束}
+
     \begin{itemize}
-        \item 列表为空，结束
+        \item 队列为空，while循环结束。
+        \item 外层节点全黑，BFS结束。
     \end{itemize}
+
     \begin{lstlisting}[style=algorithmPPT]
-        while queNode = [] != empty do // queNode = [] False
+                while queNode = [] != empty do   // queNode = [] False
         \end{lstlisting}    
 
+    \begin{lstlisting}[style=algorithmPPT]
+    foreach v in [u,r,s,t,v,w,x,y] do //全部为黑色
+        if v.color == WHITE then
+            BFS(v)
+        \end{lstlisting}
+
     \begin{figure}[htbp]
-    \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
-        \centering
-            \begin{tikzpicture}[
-                scale=1.5,
-                node distance=2.5cm,
-                every node/.style={
-                    circle, 
-                    draw, 
-                    minimum size=2em,
-                    inner sep=4pt,
-                    font=\large
-                }
-            ]
-                
-                \node[fill=black!100, text=white] (r) {r};
-                \node[fill=black!100, text=white] (s) [right of=r] {s};
-                \node[fill=black!100, text=white] (t) [right of=s] {t};
-                \node[fill=black!100, text=white] (u) [right of=t] {u};
-                \node[fill=black!100, text=white] (v) [below of=r] {v};
-                \node[fill=black!100, text=white] (w) [below of=s] {w};
-                \node[fill=black!100, text=white] (x) [below of=t] {x};
-                \node[fill=black!100, text=white] (y) [below of=u] {y};
-                
-                % Edges
-                \draw (r) -- (s);
-                \draw (r) -- (v);
-                \draw (s) -- (w);
-                \draw (t) -- (u);
-                \draw (t) -- (x);
-                \draw (u) -- (y);
-                \draw (x) -- (y);
-                \draw (w) -- (t);
-                \draw (w) -- (x);
-            \end{tikzpicture}
-            \caption{图9-2-7}
-            \label{fig:9-2-7}
-    \end{minipage}%
-    \hfill%                              % 添加水平填充
-    \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
-        \centering
-        \begin{tabular}{|c|c|c|}
-                \hline
-                节点 & Parent & dis值 \\
-                \hline
-                r & s & 4 \\
-                s & w & 3 \\
-                t & u & 1 \\
-                u & - & 0 \\
-                v & r & 5 \\
-                w & t & 2 \\
-                x & t & 2 \\
-                y & u & 1 \\
-                \hline
-            \end{tabular}
-            \caption{图9-2-7的BFS结果}
-            \label{tab:graph9-2-7-bfs}
-    \end{minipage}
+        \begin{minipage}[b]{0.6\textwidth}    % 使用[b]底部对齐，略微减小宽度留间隙
+            \centering
+                \begin{tikzpicture}[
+                    scale=1.5,
+                    node distance=2.5cm,
+                    every node/.style={
+                        circle, 
+                        draw, 
+                        minimum size=2em,
+                        inner sep=4pt,
+                        font=\large
+                    }
+                ]
+                    
+                    \node[fill=black!100, text=white] (r) {r};
+                    \node[fill=black!100, text=white] (s) [right of=r] {s};
+                    \node[fill=black!100, text=white] (t) [right of=s] {t};
+                    \node[fill=black!100, text=white] (u) [right of=t] {u};
+                    \node[fill=black!100, text=white] (v) [below of=r] {v};
+                    \node[fill=black!100, text=white] (w) [below of=s] {w};
+                    \node[fill=black!100, text=white] (x) [below of=t] {x};
+                    \node[fill=black!100, text=white] (y) [below of=u] {y};
+                    
+                    % Edges
+                    \draw (r) -- (s);
+                    \draw (r) -- (v);
+                    \draw (s) -- (w);
+                    \draw (t) -- (u);
+                    \draw (t) -- (x);
+                    \draw (u) -- (y);
+                    \draw (x) -- (y);
+                    \draw (w) -- (t);
+                    \draw (w) -- (x);
+                \end{tikzpicture}
+                \caption{图9-2-7}
+                \label{fig:9-2-7}
+        \end{minipage}%
+        \hfill%                              % 添加水平填充
+        \begin{minipage}[b]{0.4\textwidth}    % 使用[b]底部对齐
+            \centering
+            \begin{tabular}{|c|c|c|}
+                    \hline
+                    节点 & Parent & dis值 \\
+                    \hline
+                    r & s & 4 \\
+                    s & w & 3 \\
+                    t & u & 1 \\
+                    u & - & 0 \\
+                    v & r & 5 \\
+                    w & t & 2 \\
+                    x & t & 2 \\
+                    y & u & 1 \\
+                    \hline
+                \end{tabular}
+                \caption{图9-2-7的BFS结果}
+                \label{tab:graph9-2-7-bfs}
+        \end{minipage}
     \end{figure}
 \end{enumerate}
 
-
-%--------------------------------
-% 每道题包括题目问题描述和解答。答案请填下解答区。
 
 \pagebreak
 
@@ -1487,6 +1673,7 @@
 \subsubsection{PPT给出的DFS和BFS框架}
 
 \paragraph{1.DFS}
+
 \begin{lstlisting}[style=algorithmPPT]
     DFS(v)
         v.color:=GRAY
@@ -1503,6 +1690,7 @@
     \end{lstlisting}
 
 \paragraph{2.BFS}
+
 \begin{lstlisting}[style=algorithmPPT]
     BFS-WARRER(G)  // 应为 BFS-WALKER 广度优先搜索遍历器
     foreach node v in G do
@@ -1537,7 +1725,8 @@
 \subsubsection{框架中检测环的方法}
 
 \paragraph{1.DFS\\}
-\textbf{有向图：\\}
+
+\textbf{适用有向图，无向图：\\}
 
 \begin{lstlisting}[style=algorithm]
     DFS_WALKER(G) // DFS遍历器
@@ -1572,47 +1761,15 @@
                 v.color:=BLACK
             \end{lstlisting}
 
-\pagebreak
-
-\textbf{无向图：\\}
-\begin{lstlisting}[style=algorithm]
-    DFS_WALKER(G) // DFS遍历器
-    foreach v in G do
-        v.color := WHITE
-    foreach v in G do
-        if v.color == WHITE then
-            DFS(v)
-\end{lstlisting}
-
-\begin{lstlisting}[style=algorithmPPT]
-            DFS(v)
-                v.color:=GRAY
-                <Preorder processing of node v>
-                foreach neighbor w of v do
-                    if w.color = WHITE then
-                        <Exploratory processing of edge vw>
-                        DFS(w)
-                        <Backtrack processing of edge vw>              
-                    else
-                        <Checking edge vw>
-                \end{lstlisting}  
-
-\begin{lstlisting}[style=algorithm]
-                        if(w != parent) then
-                            // 发现一个不是父节点的已访问节点，存在环
-                            return true
-                    \end{lstlisting}
-
-\begin{lstlisting}[style=algorithmPPT]
-                <Postorder processing of node v>
-                v.color:=BLACK
-            \end{lstlisting}
 
 \pagebreak
 
 \paragraph{2.BFS\\}
-\textbf{有向图：\\}
-\begin{lstlisting}[style=algorithmPPT]
+
+\begin{enumerate}
+    \item \textbf{有向图：\\}
+
+    \begin{lstlisting}[style=algorithmPPT]
     BFS-WALKER(G) // BFS遍历器
     foreach node v in G do
         v.color:=WHITE; 
@@ -1623,7 +1780,7 @@
             BFS(v)
         \end{lstlisting}
 
-\begin{lstlisting}[style=algorithmPPT]
+    \begin{lstlisting}[style=algorithmPPT]
             BFS(G)
                 Initialize an empty queue queNode;
                 v.color:=GRAY;
@@ -1639,31 +1796,52 @@
                             queNode.ENQUEUE(x);
                         
                     \end{lstlisting}
-\begin{lstlisting}[style=algorithm]
-                        else if x.color == GRAY and x != w.parent then
-                            // 发现环
-                            return true;
+
+    \begin{lstlisting}[style=algorithm]
+                        else if x.color == BLACK then 
+                            // 可能是另一棵树的黑色节点
+                            // 获取并比较两个节点的所有祖先
+                            if hasCommonAncestor(x, w) then
+                                // 发现环
                         \end{lstlisting}
-\begin{lstlisting}[style=algorithmPPT]
+
+    \begin{lstlisting}[style=algorithmPPT]
                     <processing of node w>;
                     w.color:=BLACK;
-\end{lstlisting}
+    \end{lstlisting}
 
-\pagebreak
+    \begin{lstlisting}[style=algorithm]
+    hasCommonAncestor(node1, node2)
+        ancestors := new Set()
+        cur := node1
+        while cur.parent != NULL do
+            ancestors.add(cur.parent)
+            cur := cur.parent
+        
+        cur := node2
+        while cur.parent != NULL do
+            if cur.parent in ancestors then
+                return true
+            cur := cur.parent
+        
+        return false
+    \end{lstlisting}
 
-\textbf{无向图：\\}
-\begin{lstlisting}[style=algorithmPPT]
+
+    \item \textbf{无向图：\\}
+
+    \begin{lstlisting}[style=algorithmPPT]
     BFS-WALKER(G) // BFS遍历器
-    foreach node v in G do
+        foreach node v in G do
         v.color:=WHITE; 
         v.parent=NULL 
         v.dis:=+∞;
     foreach node v in G do
         if v.color == WHITE then
             BFS(v)
-\end{lstlisting}
+    \end{lstlisting}
 
-\begin{lstlisting}[style=algorithmPPT]
+    \begin{lstlisting}[style=algorithmPPT]
             BFS(G)
                 Initialize an empty queue queNode;
                 v.color:=GRAY;
@@ -1679,16 +1857,17 @@
                             queNode.ENQUEUE(x);
                     \end{lstlisting}
 
-\begin{lstlisting}[style=algorithm]
-                        else if x != w.parent then
+    \begin{lstlisting}[style=algorithm]
+                        else if x.color == GRAY then
                             // 发现交叉边，存在环
                             return true
                         \end{lstlisting}
 
-\begin{lstlisting}[style=algorithmPPT]
+    \begin{lstlisting}[style=algorithmPPT]
                     <processing of node w>;
                     w.color:=BLACK;
-\end{lstlisting}
+                \end{lstlisting}
+\end{enumerate}
 
 \pagebreak
 
